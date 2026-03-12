@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>catalogs</key>
+	<array>
+		<string>production</string>
+	</array>
+	<key>name</key>
+	<string>firefox</string>
+	<key>display_name</key>
+	<string>Mozilla Firefox</string>
+	<key>description</key>
+	<string>Free web browser from Mozilla.</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>version</key>
+	<string>1.0</string>
+	<key>category</key>
+	<string>Browsers</string>
+	<key>developer</key>
+	<string>Mozilla</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>installcheck_script</key>
+	<string>#!/bin/bash
+if [ ! -d "/Applications/Firefox.app" ]; then
+    exit 0
+fi
+installed=$(/usr/bin/defaults read "/Applications/Firefox.app/Contents/Info" CFBundleShortVersionString 2>/dev/null)
+latest=$(/usr/local/Installomator/Installomator.sh firefox RETURN_LABEL_VERSION=1 LOGGING=ERROR 2>/dev/null)
+if [ -z "$latest" ]; then
+    exit 0
+fi
+if [ "$installed" = "$latest" ]; then
+    exit 1
+fi
+exit 0
+</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+/usr/local/Installomator/Installomator.sh firefox NOTIFY=silent BLOCKING_PROCESS_ACTION=tell_user
+exit $?
+</string>
+</dict>
+</plist>
