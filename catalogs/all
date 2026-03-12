@@ -17,26 +17,31 @@
 		<string>Mozilla Firefox</string>
 		<key>installcheck_script</key>
 		<string>#!/bin/bash
+# Exit 0 = needs install/update
+# Exit 1 = current, skip
+
+# Not installed at all
 if [ ! -d "/Applications/Firefox.app" ]; then
     exit 0
 fi
-installed=$(/usr/bin/defaults read "/Applications/Firefox.app/Contents/Info" CFBundleShortVersionString 2&gt;/dev/null)
-latest=$(/usr/local/Installomator/Installomator.sh firefox RETURN_LABEL_VERSION=1 LOGGING=ERROR 2&gt;/dev/null)
-if [ -z "$latest" ]; then
-    exit 0
-fi
-if [ "$installed" = "$latest" ]; then
+
+# Use Installomator's own version check
+# RETURN_LABEL_VERSION=1 checks without installing
+output=$(/usr/local/Installomator/Installomator.sh firefoxpkg RETURN_LABEL_VERSION=1 LOGGING=ERROR 2&gt;&amp;1)
+
+if echo "$output" | grep -q "No newer version"; then
     exit 1
 fi
+
 exit 0
 </string>
 		<key>installer_type</key>
 		<string>nopkg</string>
 		<key>name</key>
-		<string>firefox</string>
+		<string>firefoxpkg</string>
 		<key>postinstall_script</key>
 		<string>#!/bin/bash
-/usr/local/Installomator/Installomator.sh firefox NOTIFY=silent BLOCKING_PROCESS_ACTION=tell_user
+/usr/local/Installomator/Installomator.sh firefoxpkg NOTIFY=silent BLOCKING_PROCESS_ACTION=tell_user
 exit $?
 </string>
 		<key>unattended_install</key>

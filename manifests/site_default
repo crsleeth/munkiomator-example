@@ -10,7 +10,7 @@
 	<string>Default</string>
 	<key>managed_installs</key>
 	<array>
-		<string>firefox</string>
+		<string>firefoxpkg</string>
 	</array>
 </dict>
 </plist>
