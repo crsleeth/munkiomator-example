@@ -12,5 +12,9 @@
 	<array>
 		<string>firefoxpkg</string>
 	</array>
+	<key>optional_installs</key>
+	<array>
+		<string>vlc</string>
+	</array>
 </dict>
 </plist>

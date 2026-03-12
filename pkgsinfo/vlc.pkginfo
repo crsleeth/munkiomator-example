@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>catalogs</key>
+	<array>
+		<string>production</string>
+	</array>
+	<key>name</key>
+	<string>vlc</string>
+	<key>display_name</key>
+	<string>VLC Media Player</string>
+	<key>description</key>
+	<string>Free and open source multimedia player.</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>version</key>
+	<string>1.0</string>
+	<key>category</key>
+	<string>Utilities</string>
+	<key>developer</key>
+	<string>VideoLAN</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>installcheck_script</key>
+	<string>#!/bin/bash
+if [ ! -d "/Applications/VLC.app" ]; then
+    exit 0
+fi
+output=$(/usr/local/Installomator/Installomator.sh vlc RETURN_LABEL_VERSION=1 LOGGING=ERROR 2>&amp;1)
+if echo "$output" | grep -q "No newer version"; then
+    exit 1
+fi
+exit 0
+</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/bash
+/usr/local/Installomator/Installomator.sh vlc NOTIFY=silent BLOCKING_PROCESS_ACTION=tell_user
+exit $?
+</string>
+</dict>
+</plist>
